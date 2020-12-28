@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.managers.AudioManager;
 public class AudioLoadHandler implements AudioLoadResultHandler {
     private AudioPlayer audioPlayer;
     private AudioManager audioManager;
+    private final int delay = 1000;
 
     public AudioLoadHandler(AudioManager audioManager, AudioPlayer audioPlayer) {
         this.audioManager = audioManager;
@@ -18,9 +19,10 @@ public class AudioLoadHandler implements AudioLoadResultHandler {
 
     @Override
     public void trackLoaded(AudioTrack audioTrack) {
+
         audioPlayer.playTrack(audioTrack);
         try {
-            Thread.sleep(5000);
+            Thread.sleep(audioTrack.getDuration() + delay);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

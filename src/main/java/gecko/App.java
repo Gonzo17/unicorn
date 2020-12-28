@@ -3,7 +3,7 @@ package gecko;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
-import net.dv8tion.jda.api.JDA;
+import gecko.events.Events;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.utils.Compression;
@@ -15,18 +15,27 @@ import javax.security.auth.login.LoginException;
 import java.io.File;
 import java.io.IOException;
 
-
 public class App {
-    private static Logger logger = LoggerFactory.getLogger(App.class);
+    private static final Logger logger = LoggerFactory.getLogger(App.class);
+    private static final String pathname = "src/main/resources/settings.yaml";
 
     public static void main(String[] args) throws LoginException, InterruptedException, IOException {
         logger.info("Application is starting...");
-        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        Settings settings = mapper.readValue(new File("src/main/resources/settings.yaml"), Settings.class);
-
+        Settings settings = new ObjectMapper(new YAMLFactory()).readValue(new File(pathname), Settings.class);
         JDABuilder builder = JDABuilder.createDefault(args[0]);
 
+        setUpJDABuilder(builder);
+        setUpJDAEventListeners(settings, builder);
 
+        builder.build().awaitReady();
+    }
+
+    private static void setUpJDAEventListeners(Settings settings, JDABuilder builder) {
+        builder.addEventListeners(new ReadyListener());
+        builder.addEventListeners(new MessageListener(new Events(settings)));
+    }
+
+    private static void setUpJDABuilder(JDABuilder builder) {
         // Disable parts of the cache
         builder.disableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE);
         // Enable the bulk delete event
@@ -37,12 +46,6 @@ public class App {
         builder.setActivity(Activity.watching("TV"));
 
         builder.setAudioSendFactory(new NativeAudioSendFactory());
-
-        builder.addEventListeners(new ReadyListener(settings.getVolume()));
-        builder.addEventListeners(new MessageListener());
-
-        JDA jda = builder.build();
-        jda.awaitReady();
     }
 }
 
