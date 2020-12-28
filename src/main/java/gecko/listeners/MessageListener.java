@@ -1,4 +1,4 @@
-package gecko;
+package gecko.listeners;
 
 import gecko.events.Event;
 import gecko.events.Events;
@@ -27,11 +27,11 @@ public class MessageListener extends ListenerAdapter {
         if (!events.isRegistered(messageReceivedEvent.getMessage())) return;
 
         Event event = events.get(messageReceivedEvent);
-        // TODO Get voice channel Id of user, who requested a bot response
+        // TODO: Get voice channel Id of user, who requested a bot response
         VoiceChannel voiceChannel = messageReceivedEvent.getJDA().getVoiceChannelById(weJamminChannelId);
         TextChannel eventChannel = messageReceivedEvent.getChannel();
 
-        event.executeReply(eventChannel, voiceChannel);
+        event.executeReply(eventChannel, voiceChannel,messageReceivedEvent.getMessage());
     }
 
     private boolean messageSentFromBot(@NotNull GuildMessageReceivedEvent event) {

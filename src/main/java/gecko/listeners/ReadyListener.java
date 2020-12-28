@@ -1,4 +1,4 @@
-package gecko;
+package gecko.listeners;
 
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildChannel;
@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.hooks.EventListener;
 import org.jetbrains.annotations.NotNull;
 
-class ReadyListener implements EventListener {
+public class ReadyListener implements EventListener {
 
     @Override
     public void onEvent(@NotNull GenericEvent event) {

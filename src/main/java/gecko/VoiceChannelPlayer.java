@@ -24,7 +24,7 @@ public class VoiceChannelPlayer {
         AudioSourceManagers.registerRemoteSources(playerManager);
         AudioSourceManagers.registerLocalSource(playerManager);
         audioManager.setSendingHandler(new AudioPlayerSendHandler(audioPlayer));
-        audioPlayer.setVolume(volume);
+        audioPlayer.setVolume(volume);      // Todo AudioPlayer extrahieren, sodass Einstellungen auch während des Betriebs gemacht werden können
         playerManager.loadItem(urlOfAudio, new AudioLoadHandler(audioManager, audioPlayer));
     }
 }

@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.managers.AudioManager;
 public class AudioLoadHandler implements AudioLoadResultHandler {
     private AudioPlayer audioPlayer;
     private AudioManager audioManager;
-    private final int delay = 1000;
+    private final int delay = 1000;     // Todo: Delay in Settings verfügbar machen
 
     public AudioLoadHandler(AudioManager audioManager, AudioPlayer audioPlayer) {
         this.audioManager = audioManager;

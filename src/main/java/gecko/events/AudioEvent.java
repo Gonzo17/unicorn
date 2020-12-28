@@ -2,16 +2,17 @@ package gecko.events;
 
 import gecko.VoiceChannelPlayer;
 import net.dv8tion.jda.api.entities.GuildChannel;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 
 public class AudioEvent extends Event {
     private final String trigger;
-    private final String url;
+    private final String uri;
     private final VoiceChannelPlayer voiceChannelPlayer;
 
-    public AudioEvent(String trigger, String url, VoiceChannelPlayer voiceChannelPlayer) {
+    public AudioEvent(String trigger, String uri, VoiceChannelPlayer voiceChannelPlayer) {
         this.trigger = trigger;
-        this.url = url;
+        this.uri = uri;
         this.voiceChannelPlayer = voiceChannelPlayer;
     }
 
@@ -21,7 +22,7 @@ public class AudioEvent extends Event {
     }
 
     @Override
-    public void executeReply(GuildChannel eventChannel, GuildChannel outputVoiceChannel) {
-        voiceChannelPlayer.playAudioIn((VoiceChannel) outputVoiceChannel, url);
+    public void executeReply(GuildChannel eventChannel, GuildChannel outputVoiceChannel, Message message) {
+        voiceChannelPlayer.playAudioIn((VoiceChannel) outputVoiceChannel, uri);
     }
 }

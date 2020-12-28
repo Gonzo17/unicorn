@@ -2,6 +2,9 @@ package gecko.events;
 
 import gecko.VoiceChannelPlayer;
 import gecko.Settings;
+import gecko.actions.ActionEvent;
+import gecko.actions.ChangePrefixAction;
+import gecko.actions.ChangeVolumeAction;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +18,7 @@ public class Events {
         VoiceChannelPlayer voiceChannelPlayer = new VoiceChannelPlayer(settings.getVolume());
         events = new HashMap<>();
 
-        // TODO Events aus ner DB auslesen
+        // TODO Events aus einer DB auslesen
         registerEvent(new ReplyEvent("unicorn", "🦄"));
         registerEvent(new ReplyEvent("ping", "pong"));
         registerEvent(new ReplyEvent("help", "Befehle:\ndrei,knaller,headshot,reden,lol,saarland,geil,stop,schnauze,toll,party,cool,kacke,gun,wer,zeit"));
@@ -36,6 +39,10 @@ public class Events {
         registerEvent(new AudioEvent("gun", "https://www.youtube.com/watch?v=8FSjyp4fUu8", voiceChannelPlayer));
         registerEvent(new AudioEvent("wer", "https://www.youtube.com/watch?v=D8BQXcoKIF0", voiceChannelPlayer));
         registerEvent(new AudioEvent("zeit", "https://www.youtube.com/watch?v=lurNxXFBIuA", voiceChannelPlayer));
+
+        registerEvent(new ActionEvent("setPrefix", new ChangePrefixAction(settings)));
+        registerEvent(new ActionEvent("setVolume", new ChangeVolumeAction(settings)));
+        // Todo: Factory für verschiedene Event Typen verwenden
     }
 
     public void registerEvent(Event event) {

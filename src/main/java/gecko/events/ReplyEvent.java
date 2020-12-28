@@ -1,6 +1,7 @@
 package gecko.events;
 
 import net.dv8tion.jda.api.entities.GuildChannel;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 public class ReplyEvent extends Event {
@@ -18,7 +19,7 @@ public class ReplyEvent extends Event {
     }
 
     @Override
-    public void executeReply(GuildChannel channel, GuildChannel voiceChannel) {
+    public void executeReply(GuildChannel channel, GuildChannel voiceChannel, Message message) {
         TextChannel textChannel = (TextChannel) channel;
         textChannel.sendMessage(response).queue();
     }
