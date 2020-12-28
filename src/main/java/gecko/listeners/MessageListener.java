@@ -2,16 +2,19 @@ package gecko.listeners;
 
 import gecko.events.Event;
 import gecko.events.Events;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.managers.GuildManager;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class MessageListener extends ListenerAdapter {
 
     Events events;
-    private final String weJamminChannelId = "718185588385120296";
+    private final String voiceOutChannelId = "718185588385120296";
 
     public MessageListener(Events events) {
         this.events = events;
@@ -27,11 +30,24 @@ public class MessageListener extends ListenerAdapter {
         if (!events.isRegistered(messageReceivedEvent.getMessage())) return;
 
         Event event = events.get(messageReceivedEvent);
-        // TODO: Get voice channel Id of user, who requested a bot response
-        VoiceChannel voiceChannel = messageReceivedEvent.getJDA().getVoiceChannelById(weJamminChannelId);
+
+        String channelId = findVoiceChannelOfUser(messageReceivedEvent.getGuild().getJDA(), messageReceivedEvent.getMember());
+        VoiceChannel voiceChannel = messageReceivedEvent.getJDA().getVoiceChannelById(channelId);
+
         TextChannel eventChannel = messageReceivedEvent.getChannel();
 
         event.executeReply(eventChannel, voiceChannel,messageReceivedEvent.getMessage());
+    }
+
+    private String findVoiceChannelOfUser(JDA jda, Member member) {
+        GuildVoiceState voiceState = member.getVoiceState();
+        VoiceChannel voiceChannel = voiceState.getChannel();
+
+        if (voiceChannel != null) {
+            return String.valueOf(voiceChannel.getIdLong());
+        }
+
+        return voiceOutChannelId;
     }
 
     private boolean messageSentFromBot(@NotNull GuildMessageReceivedEvent event) {

@@ -39,7 +39,8 @@ public class App {
 
     private static void setUpJDABuilder(JDABuilder builder) {
         // Disable parts of the cache
-        builder.disableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE);
+// Wenn der Cache deaktiviert ist, dann kann der Kanal der Person, die geschrieben hat, nicht gelesen werden
+//        builder.disableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE);
         // Enable the bulk delete event
         builder.setBulkDeleteSplittingEnabled(false);
         // Disable compression (not recommended)
