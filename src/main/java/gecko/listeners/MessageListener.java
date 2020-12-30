@@ -3,22 +3,23 @@ package gecko.listeners;
 import gecko.events.Event;
 import gecko.events.Events;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.GuildVoiceState;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.managers.GuildManager;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import java.util.List;
-
+@Component
 public class MessageListener extends ListenerAdapter {
 
-    Events events;
     private final String voiceOutChannelId = "718185588385120296";
 
-    public MessageListener(Events events) {
-        this.events = events;
-    }
+    @Autowired
+    Events events;
 
     @Override
     public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
@@ -36,7 +37,7 @@ public class MessageListener extends ListenerAdapter {
 
         TextChannel eventChannel = messageReceivedEvent.getChannel();
 
-        event.executeReply(eventChannel, voiceChannel,messageReceivedEvent.getMessage());
+        event.executeReply(eventChannel, voiceChannel, messageReceivedEvent.getMessage());
     }
 
     private String findVoiceChannelOfUser(JDA jda, Member member) {

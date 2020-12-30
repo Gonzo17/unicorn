@@ -7,7 +7,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
 public class AudioLoadHandler implements AudioLoadResultHandler {
-    private AudioPlayer audioPlayer;
+    private final AudioPlayer audioPlayer;
 
     public AudioLoadHandler(AudioPlayer audioPlayer) {
         this.audioPlayer = audioPlayer;

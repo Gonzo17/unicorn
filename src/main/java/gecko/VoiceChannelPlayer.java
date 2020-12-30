@@ -6,13 +6,16 @@ import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class VoiceChannelPlayer {
 
-    private final int volume;
+    private final Settings settings;
 
-    public VoiceChannelPlayer(int volume) {
-        this.volume = volume;
+    public VoiceChannelPlayer(@Autowired Settings settings) {
+        this.settings = settings;
     }
 
     public void playAudioIn(VoiceChannel outputVoiceChannel, String urlOfAudio) {
@@ -24,7 +27,7 @@ public class VoiceChannelPlayer {
         AudioSourceManagers.registerRemoteSources(playerManager);
         AudioSourceManagers.registerLocalSource(playerManager);
         audioManager.setSendingHandler(new AudioPlayerSendHandler(audioPlayer));
-        audioPlayer.setVolume(volume);      // Todo AudioPlayer extrahieren, sodass Einstellungen auch während des Betriebs gemacht werden können
+        audioPlayer.setVolume(settings.getVolume());
         playerManager.loadItem(urlOfAudio, new AudioLoadHandler(audioPlayer));
     }
 }

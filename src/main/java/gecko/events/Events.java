@@ -1,21 +1,26 @@
 package gecko.events;
 
 import gecko.VoiceChannelPlayer;
-import gecko.Settings;
 import gecko.actions.ActionEvent;
-import gecko.actions.ChangePrefixAction;
 import gecko.actions.ChangeVolumeAction;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 
+@Component
 public class Events {
+    private static final Logger LOG
+            = LoggerFactory.getLogger(Events.class);
+
     HashMap<String, Event> events;
 
-    public Events(Settings settings) {
-        VoiceChannelPlayer voiceChannelPlayer = new VoiceChannelPlayer(settings.getVolume());
+    public Events(@Autowired VoiceChannelPlayer voiceChannelPlayer, @Autowired ChangeVolumeAction changeVolumeAction) {
         events = new HashMap<>();
 
         // TODO Events aus einer DB auslesen
@@ -40,8 +45,8 @@ public class Events {
         registerEvent(new AudioEvent("wer", "https://www.youtube.com/watch?v=D8BQXcoKIF0", voiceChannelPlayer));
         registerEvent(new AudioEvent("zeit", "https://www.youtube.com/watch?v=lurNxXFBIuA", voiceChannelPlayer));
 
-        registerEvent(new ActionEvent("setPrefix", new ChangePrefixAction(settings)));
-        registerEvent(new ActionEvent("setVolume", new ChangeVolumeAction(settings)));
+        // registerEvent(new ActionEvent("setPrefix", new ChangePrefixAction()));
+        registerEvent(new ActionEvent("setVolume", changeVolumeAction));
         // Todo: Factory für verschiedene Event Typen verwenden
     }
 
@@ -50,11 +55,20 @@ public class Events {
     }
 
     public boolean isRegistered(Message message) {
-        return events.containsKey(message.getContentRaw());
+        return events.containsKey(getTriggerWord(message));
     }
 
     public Event get(@NotNull GuildMessageReceivedEvent messageReceivedEvent) {
-        String triggerWord = messageReceivedEvent.getMessage().getContentRaw();
+        String triggerWord = getTriggerWord(messageReceivedEvent.getMessage());
         return events.get(triggerWord);
+    }
+
+    @NotNull
+    private String getTriggerWord(@NotNull Message message) {
+        String messageString = message.getContentRaw();
+        if(messageString.contains(" ")){
+            return messageString.substring(0, messageString.indexOf(" "));
+        }
+        return messageString;
     }
 }
