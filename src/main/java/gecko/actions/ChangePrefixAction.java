@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ChangePrefixAction extends SettingAction {
+public class ChangePrefixAction implements IAction {
+
+    private final Settings settings;
 
     public ChangePrefixAction(@Autowired Settings settings) {
-        super(settings);
+        this.settings = settings;
     }
 
     @Override
