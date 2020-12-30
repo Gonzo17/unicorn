@@ -6,10 +6,10 @@ import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
 import gecko.events.Events;
 import gecko.listeners.MessageListener;
 import gecko.listeners.ReadyListener;
+import gecko.listeners.VoiceChannelLeaveListener;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.utils.Compression;
-import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,6 +35,7 @@ public class App {
     private static void setUpJDAEventListeners(Settings settings, JDABuilder builder) {
         builder.addEventListeners(new ReadyListener());
         builder.addEventListeners(new MessageListener(new Events(settings)));
+        builder.addEventListeners(new VoiceChannelLeaveListener());
     }
 
     private static void setUpJDABuilder(JDABuilder builder) {
